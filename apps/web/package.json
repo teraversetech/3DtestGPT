@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "test": "vitest"
+    "test": "node scripts/offline-test.mjs",
+    "test:vitest": "vitest run"
   },
   "dependencies": {
     "next": "15.0.0-canary.36",

@@ -24,7 +24,8 @@ Environment variables: `.env.example` (`NEXT_PUBLIC_API_BASE`).
 pnpm --filter web test
 ```
 
-Vitest + React Testing Library snapshot coverage lives under `apps/web/tests`.
+In sandboxed CI environments where installing dependencies is impossible, this command runs a Node-based smoke check script that inspects critical components for required UI affordances.
+Full Vitest coverage remains available locally via `pnpm --filter web test:vitest` once dependencies are installed.
 
 ## Styling
 
