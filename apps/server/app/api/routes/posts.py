@@ -56,17 +56,22 @@ def create_post(
     return _serialize_post(post, db)
 
 
-@router.post("/{post_id}/like", status_code=status.HTTP_204_NO_CONTENT)
-def like_post(post_id: str, db: Session = Depends(get_db), user: User = Depends(get_current_user)) -> None:
+@router.post("/{post_id}/like", status_code=status.HTTP_200_OK)
+def like_post(
+    post_id: str,
+    db: Session = Depends(get_db),
+    user: User = Depends(get_current_user),
+) -> dict[str, bool]:
     post = db.get(Post, post_id)
     if not post:
         raise HTTPException(status_code=404, detail="Post not found")
     existing = db.scalar(select(Like).where(Like.post_id == post_id, Like.user_id == user.id))
     if existing:
-        return
+        return {"liked": True}
     like = Like(id=str(uuid.uuid4()), post_id=post_id, user_id=user.id)
     db.add(like)
     db.commit()
+    return {"liked": True}
 
 
 @router.post("/{post_id}/comment", response_model=CommentResponse, status_code=status.HTTP_201_CREATED)
