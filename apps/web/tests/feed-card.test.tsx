@@ -1,6 +1,6 @@
-import { render, screen } from "@testing-library/react";
 import { FeedCard } from "@/components/FeedCard";
 import { FeedPost } from "@fashion3d/types";
+import { renderToString } from "react-dom/server";
 
 const mockPost: FeedPost = {
   id: "post-1",
@@ -23,8 +23,8 @@ const mockPost: FeedPost = {
 
 describe("FeedCard", () => {
   it("renders caption and tags", () => {
-    render(<FeedCard post={mockPost} />);
-    expect(screen.getByText(/Holographic trench coat/i)).toBeInTheDocument();
-    expect(screen.getByText(/#hologram/i)).toBeInTheDocument();
+    const html = renderToString(<FeedCard post={mockPost} />);
+    expect(html).toContain("Holographic trench coat");
+    expect(html).toContain("#hologram");
   });
 });
