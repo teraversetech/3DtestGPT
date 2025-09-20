@@ -1,0 +1,15 @@
+{
+  "expo": {
+    "name": "Fashion3D",
+    "slug": "fashion3d",
+    "scheme": "fashion3d",
+    "version": "0.1.0",
+    "orientation": "portrait",
+    "assetBundlePatterns": ["**/*"],
+    "plugins": [
+      ["expo-camera"],
+      ["expo-notifications"],
+      ["expo-router"]
+    ]
+  }
+}

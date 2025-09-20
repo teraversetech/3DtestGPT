@@ -1,0 +1,32 @@
+[tool.poetry]
+name = "fashion3d-worker"
+version = "0.1.0"
+description = "3D reconstruction worker for Fashion3D"
+authors = ["Fashion3D Team <dev@fashion3d.local>"]
+packages = [{ include = "fashion3d_worker", from = "src" }]
+
+[tool.poetry.dependencies]
+python = "^3.11"
+click = "8.1.7"
+structlog = "24.1.0"
+minio = "7.2.4"
+numpy = "1.26.4"
+opencv-python-headless = "4.9.0.80"
+mediapipe = "0.10.14"
+Pillow = "10.3.0"
+requests = "2.32.2"
+scikit-image = "0.23.2"
+rq = "1.15.1"
+redis = "5.0.4"
+open3d = { version = "0.17.0", optional = true }
+pygltflib = "1.16.0"
+
+[tool.poetry.extras]
+gpu = ["open3d"]
+
+[tool.poetry.group.dev.dependencies]
+pytest = "8.2.1"
+
+[build-system]
+requires = ["poetry-core>=1.8.0"]
+build-backend = "poetry.core.masonry.api"

@@ -1,0 +1,6 @@
+{
+  "name": "@fashion3d/types",
+  "version": "0.1.0",
+  "type": "module",
+  "main": "src/index.ts"
+}

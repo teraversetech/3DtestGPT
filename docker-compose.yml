@@ -1,0 +1,65 @@
+version: "3.9"
+services:
+  postgres:
+    image: postgres:15
+    environment:
+      POSTGRES_USER: fashion3d
+      POSTGRES_PASSWORD: fashion3d
+      POSTGRES_DB: fashion3d
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+  redis:
+    image: redis:7
+    ports:
+      - "6379:6379"
+  minio:
+    image: minio/minio:RELEASE.2024-03-11T20-19-45Z
+    command: server /data --console-address ":9001"
+    environment:
+      MINIO_ROOT_USER: minioadmin
+      MINIO_ROOT_PASSWORD: minioadmin
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    volumes:
+      - minio_data:/data
+  server:
+    build: ./apps/server
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8000
+    depends_on:
+      - postgres
+      - redis
+      - minio
+    environment:
+      - DATABASE_URL=postgresql+psycopg://fashion3d:fashion3d@postgres:5432/fashion3d
+      - REDIS_URL=redis://redis:6379/0
+      - MINIO_ENDPOINT=http://minio:9000
+      - MINIO_ACCESS_KEY=minioadmin
+      - MINIO_SECRET_KEY=minioadmin
+      - MINIO_BUCKET_RAW=raw-videos
+      - MINIO_BUCKET_ARTIFACTS=artifacts
+      - JWT_SECRET=devsecret
+      - PROMETHEUS_PORT=8001
+      - STRIPE_WEBHOOK_SECRET=whsec_dummy
+      - WORKER_WEBHOOK_SECRET=workersecret
+    ports:
+      - "8000:8000"
+  worker:
+    build: ./apps/worker
+    command: ./entrypoint.sh
+    depends_on:
+      - redis
+      - minio
+    environment:
+      - REDIS_URL=redis://redis:6379/0
+      - MINIO_ENDPOINT=http://minio:9000
+      - MINIO_ACCESS_KEY=minioadmin
+      - MINIO_SECRET_KEY=minioadmin
+      - MINIO_BUCKET_RAW=raw-videos
+      - MINIO_BUCKET_ARTIFACTS=artifacts
+      - GPU_ENABLED=false
+volumes:
+  postgres_data:
+  minio_data:
