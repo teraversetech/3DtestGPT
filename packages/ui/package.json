@@ -1,0 +1,13 @@
+{
+  "name": "@fashion3d/ui",
+  "version": "0.1.0",
+  "type": "module",
+  "main": "src/index.ts",
+  "dependencies": {
+    "react": "^19.0.0-rc",
+    "react-native": "0.74.0",
+    "class-variance-authority": "^0.7.0",
+    "clsx": "^2.1.0",
+    "@radix-ui/react-dialog": "^1.0.5"
+  }
+}
