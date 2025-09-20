@@ -1,6 +1,6 @@
 from fastapi.testclient import TestClient
 
-from .test_quota import CHUNK, _perform_upload
+from tests.test_quota import CHUNK, _perform_upload
 
 
 def test_create_job(client: TestClient, auth_token: str) -> None:

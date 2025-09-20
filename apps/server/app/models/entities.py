@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from datetime import datetime
+from datetime import datetime, timezone
 
 from sqlalchemy import DateTime, ForeignKey, JSON, String, Text
 from sqlalchemy.dialects.postgresql import UUID
@@ -116,7 +116,11 @@ class ScanQuota(Base):
     month: Mapped[str] = mapped_column(String(7), nullable=False)
     used_scans: Mapped[int] = mapped_column(default=0)
     plan: Mapped[str] = mapped_column(String(50), default="free")
-    updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default="now()")
+    updated_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True),
+        default=lambda: datetime.now(timezone.utc),
+        onupdate=lambda: datetime.now(timezone.utc),
+    )
 
     user: Mapped[User] = relationship("User")
 

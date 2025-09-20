@@ -91,25 +91,29 @@ def comment_post(
     return CommentResponse(id=comment.id, body=comment.body, user=user, created_at=comment.created_at)
 
 
-@router.delete("/{post_id}", status_code=status.HTTP_204_NO_CONTENT)
-def delete_post(post_id: str, db: Session = Depends(get_db), user: User = Depends(get_current_user)) -> None:
+@router.delete("/{post_id}", status_code=status.HTTP_200_OK)
+def delete_post(
+    post_id: str, db: Session = Depends(get_db), user: User = Depends(get_current_user)
+) -> dict[str, bool]:
     post = db.get(Post, post_id)
     if not post or post.owner_id != user.id:
         raise HTTPException(status_code=404, detail="Post not found")
     post.deleted_at = post.deleted_at or post.created_at
     db.add(post)
     db.commit()
+    return {"deleted": True}
 
 
-@router.delete("/artifacts/{artifact_id}", status_code=status.HTTP_204_NO_CONTENT)
+@router.delete("/artifacts/{artifact_id}", status_code=status.HTTP_200_OK)
 def delete_artifact(
     artifact_id: str,
     db: Session = Depends(get_db),
     user: User = Depends(get_current_user),
-) -> None:
+) -> dict[str, bool]:
     artifact = db.get(Artifact, artifact_id)
     if not artifact or artifact.owner_id != user.id:
         raise HTTPException(status_code=404, detail="Artifact not found")
     artifact.deleted_at = artifact.deleted_at or artifact.created_at
     db.add(artifact)
     db.commit()
+    return {"deleted": True}

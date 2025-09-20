@@ -14,6 +14,7 @@ class Settings(BaseSettings):
     minio_secret_key: str = "minioadmin"
     minio_bucket_raw: str = "raw-videos"
     minio_bucket_artifacts: str = "artifacts"
+    storage_offline: bool = False
     jwt_secret: str = "devsecret"
     jwt_algorithm: str = "HS256"
     jwt_expire_minutes: int = 60 * 24

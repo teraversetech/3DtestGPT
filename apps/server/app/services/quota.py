@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from datetime import datetime
+from datetime import datetime, timezone
 
 from sqlalchemy import select
 from sqlalchemy.orm import Session
@@ -12,7 +12,7 @@ settings = get_settings()
 
 
 def _month_key() -> str:
-    return datetime.utcnow().strftime("%Y-%m")
+    return datetime.now(timezone.utc).strftime("%Y-%m")
 
 
 def ensure_quota(session: Session, user: User) -> None:
@@ -40,3 +40,4 @@ def increment_quota(session: Session, user: User) -> None:
         session.flush()
     quota.used_scans += 1
     session.add(quota)
+    session.commit()
